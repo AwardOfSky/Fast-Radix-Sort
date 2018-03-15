@@ -104,10 +104,10 @@ int array_sorted(int vector[], int size) {
   ---List of optimizations implemented---
 
   1 - Use of powers of 2 for the expoents and bucket size in order to use
-      shift and bitwise operations (expoent = 8 in order to sort 1 per iteration).
+      shift and bitwise operations (expoent = 8 in order to sort 1 byte per iteration).
       This works a lot like the American Flag algorithm used to sort strings.
 
-  2 - Small preliminar check of the initial unsorted array to determine
+  2 - Small preliminary check of the initial unsorted array to determine
       number of bytes to sort. Special useful in randomly shuffled arrays.
 
   3 - The indexes of the buckets don't necessarily express the cumulative
@@ -127,7 +127,7 @@ int array_sorted(int vector[], int size) {
       from the negative numbers instead (in case of different signs). This task
       has a relatively small overhead.
 
-  6 - Neglecting the shift operation when sorting the first byte (equals >> 0)
+  6 - Neglecting the shift operation when sorting the first byte (equals >> 0).
       
   Adding to the main structural optimizations of the algorithm, there are a
   number of microoptimizations to further improve performance. These include
