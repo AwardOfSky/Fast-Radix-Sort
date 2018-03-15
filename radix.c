@@ -65,7 +65,7 @@ int main(int argc, char * argv []) {
     end = clock();
 
     /* Print results */
-    printf("\nRadix sort took %.6f sesonds.\n[sorted %d numbers from %d to %d].\n",
+    printf("\nRadix sort took %.6f seconds.\n[sorted %d numbers from %d to %d].\n",
 	   (double)(end - start) / CLOCKS_PER_SEC, size, num_min, num_max);
 
     if(array_sorted(a, size) != 0){
