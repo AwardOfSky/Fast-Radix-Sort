@@ -53,7 +53,7 @@ int main(int argc, char * argv []) {
     }
 
     /* Set the sign flag (this is optional in real case scenarios) */
-    if(num_min < 0 && num_max > 0) {
+    if(num_min < 0) {
 	same_sign = 0;
     } else {
 	same_sign = 1;
@@ -72,6 +72,10 @@ int main(int argc, char * argv []) {
 	printf("The array was sorted successfully!\n");
     } else {
     	printf("The array wasn't fully sorted. Please report this problem!\n");
+    }
+
+    for(i = 0; i < size; i++) {
+	printf("%d\n", a[i]);
     }
     
     return 0;
@@ -149,7 +153,7 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
     } else if(same_sign && *vector < 0) {	\
 	LOOP_MAX__(<, *s, a, b);		\
     } else {					\
-	LOOP_MAX__(>, ABS__(*s), a, b);	\
+	LOOP_MAX__(>, ABS__(*s), a, b);		\
     }
     /* Check for biggest integer in [a, b] array segment */
 #define LOOP_MAX__(S, V, a, b)				\
