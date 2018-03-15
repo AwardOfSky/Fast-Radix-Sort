@@ -60,11 +60,11 @@ TODO
 
 <h4><b>The code looks ugly!</b></h4>
 <p>I couldn't agree more...
-  <br>This is mainly because of the excessive macro use and other
+  <br>This is mainly because of the excessive macros use and other
   small improvements that damages the code readability.
-  I would not have done this changes ifthe main objective wasn't performance</p>
+  <br>I would not have done this changes ifthe main objective wasn't performance</p>
 
 <h4><b>Further improvement:</b></h4>
-<p>This algorithm still has space for improving and if you want to optimized it further
+<p>This algorithm still has space for improving and if you want to optimize it further
   I can provide a cleaner version for clarity.</p>
 <p>If you are kind enough, let me know what otimizations you were able to do.</p> 
