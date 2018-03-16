@@ -56,7 +56,8 @@ of the box.</p>
 **Columns** = Number of bits that the element with the maximun value in the array has
 
 <p>Mind that as the algorithm works byte per byte, having 1 bit or 8 bits maximun is the same timewise.
-<br>The time values are measured in seconds.</p>
+<br>The time values are measured in seconds.
+<br>This benchmarks were performed on randomly shuffled arrays.</p>
 
 <h4><b>Same sign arrays:</b></h4>
 
