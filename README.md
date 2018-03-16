@@ -14,7 +14,7 @@ An optimized implementation of the Radix LSD sorting algorithm for integers, wri
 
 <h2><b>Optimizations:</b></h2>
 
-<p>The sorting function was made without the help of compiler otimizations in mind.
+<p>The sorting function was made without the help of compiler optimizations in mind.
 <br>Therefore, it uses some microtimizations like macros and registers to speed some things up.
 <br>Be mindful that compilers like GCC don't provide optimizations unless told otherwise.
 <br>The ideia is to just include the function in your program and get the performance right out
@@ -96,4 +96,4 @@ of the box.</p>
 <h4><b>Further improvement:</b></h4>
 <p>This algorithm still has space for improving and if you want to optimize it further
   I can provide a cleaner version for clarity.
-<br>If you are kind enough, let me know what otimizations you were able to do.</p>
+<br>If you are kind enough, let me know what optimizations you were able to do.</p>
