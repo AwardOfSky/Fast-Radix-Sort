@@ -51,10 +51,12 @@ of the box.</p>
 <h2><b>Benchmarks:</b></h2>
 <p>All benchamrks were performed on a Intel Core-i7 6700, running Ubuntu 16.04.9.
 <br>The program was compiled with GCC 5.4.0-6, with no compiler otimizations enabled.</p>
-<p>The first table column shows the number of elements and the first row show the number of
-bits that the maximun number in the array has. Mind that as the algorithm works byte
-per byte, having 1 bit or 8 bits maximun is the same timewise.</p>
-<p>The time values are measured in seconds.</p>
+
+**Rows** = Number of elements in the array<br>
+**Columns** = Number of bits that the element with the maximun value in the array has
+
+<p>Mind that as the algorithm works byte per byte, having 1 bit or 8 bits maximun is the same timewise.
+<br>The time values are measured in seconds.</p>
 
 <h4><b>Same sign arrays:</b></h4>
 
@@ -66,7 +68,13 @@ per byte, having 1 bit or 8 bits maximun is the same timewise.</p>
 |**1 million**   | 0.008333 | 0.006910 | 0.004460 | 0.002471 |
 
 <h4><b>Different sign arrays:</b></h4>
-<p>TODO</p>
+
+|_Elements_      | 32 bits   | 24 bits  | 16 bits  | 8 bits   |
+|:---------------|----------:|---------:|---------:|---------:|
+|**1 Billion**   | 10.172354 | 8.473708 | 6.144303 | 3.913641 |
+|**100 million** | 1.001939  | 0.840281 | 0.607891 | 0.386767 |
+|**10 million**  | 0.100724  | 0.084023 | 0.061230 | 0.038532 |
+|**1 million**   | 0.008700  | 0.007040 | 0.004784 | 0.002616 |
 
 <h2><b>Use and compilation:</b></h2>
 <p>Provided you are in a Linux based OS, enter the following commands in your terminal:</p>
