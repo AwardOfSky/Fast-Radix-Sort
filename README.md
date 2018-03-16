@@ -8,7 +8,7 @@ An optimized implementation of the Radix LSD sorting algorithm for integers, wri
 <br>but starting with the Least Significant Digit/Byte).</p>
 <p>This implementation follows an out-of-place approach, meaning it uses an helper array in order to successfully sort
   the original vector of integers.</p>
-<p>The program supports all main C compilers (GCC, Clang, MCVS, ..) and architectures.
+<p>The program supports all main C compilers (GCC, Clang, MCVS, ...) and architectures.
 <p>For more information about the algorithm itself check the
 <a href="https://en.wikipedia.org/wiki/Radix_sort">Wikipedia Page</a>.</p>
 
@@ -70,7 +70,7 @@ per byte, having 1 bit or 8 bits maximun is the same timewise.</p>
 <p>I couldn't agree more...
   <br>This is mainly because of the excessive use of macros and other
   small improvements that damages the code readability.
-  <br>I would not have done this changes ifthe main objective wasn't performance</p>
+  <br>I would not have done this changes if the main objective wasn't performance</p>
 
 <h4><b>Further improvement:</b></h4>
 <p>This algorithm still has space for improving and if you want to optimize it further
