@@ -1,5 +1,5 @@
 # Optimized-Radix-Sort
-An optimized implementation of the Radix LSD sorting algorithm for integers (out of place).
+An optimized implementation of the Radix LSD sorting algorithm for integers, written in C.
 
 <h2><b>Algorithm:</b></h2>
 <p>Radix Sort is a non-comparative sorting algorithm able to sort a list of N integers in O(kn) time complexity.
