@@ -83,5 +83,5 @@ per byte, having 1 bit or 8 bits maximun is the same timewise.</p>
 
 <h4><b>Further improvement:</b></h4>
 <p>This algorithm still has space for improving and if you want to optimize it further
-  I can provide a cleaner version for clarity.</p>
-<br>If you are kind enough, let me know what otimizations you were able to do.
+  I can provide a cleaner version for clarity.
+<br>If you are kind enough, let me know what otimizations you were able to do.</p>
