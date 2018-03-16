@@ -54,6 +54,7 @@ of the box.</p>
 <p>The first table column shows the number of elements and the first row show the number of
 bits that the maximun number in the array has. Mind that as the algorithm works byte
 per byte, having 1 bit or 8 bits maximun is the same timewise.</p>
+<p>The time values are measured in seconds.</p>
 
 <h4><b>Same sign arrays:</b></h4>
 
@@ -83,4 +84,4 @@ per byte, having 1 bit or 8 bits maximun is the same timewise.</p>
 <h4><b>Further improvement:</b></h4>
 <p>This algorithm still has space for improving and if you want to optimize it further
   I can provide a cleaner version for clarity.</p>
-<p>If you are kind enough, let me know what otimizations you were able to do.</p> 
+<br>If you are kind enough, let me know what otimizations you were able to do.
