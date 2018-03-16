@@ -57,7 +57,15 @@ per byte, having 1 bit or 8 bits maximun is the same timewise.</p>
 
 <h4><b>Same sign arrays:</b></h4>
 
+|_Elements_      | 32 bits  | 24 bits  | 16 bits  | 8 bits   |
+|:---------------|---------:|---------:|---------:|---------:|
+|**1 Billion**   | 9.526307 | 8.196153 | 5.582001 | 3.656286 |
+|**100 million** | 0.948754 | 0.812009 | 0.554831 | 0.360952 |
+|**10 million**  | 0.094950 | 0.081082 | 0.055406 | 0.035727 |
+|**1 million**   | 0.008333 | 0.006910 | 0.004460 | 0.002471 |
+
 <h4><b>Different sign arrays:</b></h4>
+<p>TODO</p>
 
 <h2><b>Use and compilation:</b></h2>
 <p>Provided you are in a Linux based OS, enter the following commands in your terminal:</p>
