@@ -6,7 +6,7 @@ An optimized implementation of the Radix LSD sorting algorithm for integers, wri
 <br>The presented program showcases an implementation of said algorithm written in ANSI C and optimized for speed.</p>
 <p>The function sorts 32-bit integers (signed or unsigned), one byte at a time (a bit like the American Flag sorting,
 <br>but starting with the Least Significant Digit/Byte).</p>
-<p>This implementation follows an out-of-order approach, meaning it uses an helper array in order to successfully sort
+<p>This implementation follows an out-of-place approach, meaning it uses an helper array in order to successfully sort
   the original vector of integers.</p>
 <p>The program supports all main C compilers (GCC, Clang, MCVS, ..) and architectures.
 <p>For more information about the algorithm itself check the
@@ -49,7 +49,15 @@ of the box.</p>
 </ul>      
 
 <h2><b>Benchmarks:</b></h2>
-TODO
+<p>All benchamrks were performed on a Intel Core-i7 6700, running Ubuntu 16.04.9.
+<br>The program was compiled with GCC 5.4.0-6, with no compiler otimizations enabled.</p>
+<p>The first table column shows the number of elements and the first row show the number of
+bits that the maximun number in the array has. Mind that as the algorithm works byte
+per byte, having 1 bit or 8 bits maximun is the same timewise.</p>
+
+<h4><b>Same sign arrays:</b></h4>
+
+<h4><b>Different sign arrays:</b></h4>
 
 <h2><b>Use and compilation:</b></h2>
 <p>Provided you are in a Linux based OS, enter the following commands in your terminal:</p>
