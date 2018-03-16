@@ -53,7 +53,7 @@ int main(int argc, char * argv []) {
     }
 
     /* Set the sign flag (this is optional in real case scenarios) */
-    if(num_min < 0) {
+    if(num_min < 0 && num_max > 0) {
 	same_sign = 0;
     } else {
 	same_sign = 1;
@@ -72,10 +72,6 @@ int main(int argc, char * argv []) {
 	printf("The array was sorted successfully!\n");
     } else {
     	printf("The array wasn't fully sorted. Please report this problem!\n");
-    }
-
-    for(i = 0; i < size; i++) {
-	printf("%d\n", a[i]);
     }
     
     return 0;
@@ -163,8 +159,8 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
 	}						\
     }
 
-    /* b = pointer to helper array; s and k = array iterators */
-    /* exp = bits sorted, max = maximun number in array       */
+    /* b = helper array pointer ; s and k = array iterators */
+    /* exp = bits sorted, max = maximun number in array     */
     register int *b, *s, *k;
     register int exp = 0;
     register int max = *vector;
@@ -185,10 +181,11 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
     } else {
 	CHECK_MAX__(preliminary, size);
     }
-
+    max = ABS__(max);
+    
     /* Helper array declaration */
     b = (int *)malloc(sizeof(int) * size);
-
+    
     /* Check if last byte sorted was odd */
 #define BYTE_IS_ODD__ ((exp >> 3) & 1)
 
