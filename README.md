@@ -4,10 +4,10 @@ An optimized implementation of the Radix LSD sorting algorithm for integers, wri
 <h2><b>Algorithm:</b></h2>
 <p>Radix Sort is a non-comparative sorting algorithm able to sort a list of N integers in O(kn) time complexity.
 <br>The presented program showcases an implementation of said algorithm written in ANSI C and optimized for speed.</p>
-<p>The functions sorts 32-bit integers (signed or unsigned), one byte at a time (a bit like the American Flag sorting,
+<p>The function sorts 32-bit integers (signed or unsigned), one byte at a time (a bit like the American Flag sorting,
 <br>but starting with the Least Significant Digit/Byte).</p>
 <p>This implementation follows an out-of-order approach, meaning it uses an helper array in order to successfully sort
-  the vector of integers.</p>
+  the original vector of integers.</p>
 <p>The program supports all main C compilers (GCC, Clang, MCVS, ..) and architectures.
 <p>For more information about the algorithm itself check the
 <a href="https://en.wikipedia.org/wiki/Radix_sort">Wikipedia Page</a>.</p>
@@ -15,9 +15,9 @@ An optimized implementation of the Radix LSD sorting algorithm for integers, wri
 <h2><b>Optimizations:</b></h2>
 
 <p>The sorting function was made without the help of compiler otimizations in mind.
-<br>Therefore, it uses some microtimizations like macros and registers to speed.
+<br>Therefore, it uses some microtimizations like macros and registers to speed some things up.
 <br>Be mindful that compilers like GCC don't provide optimizations unless told otherwise.
-<br>The ideia is to just include the function in your and get the performance right out
+<br>The ideia is to just include the function in your program and get the performance right out
 of the box.</p>
 
 <ul>
@@ -60,7 +60,7 @@ TODO
 
 <h4><b>The code looks ugly!</b></h4>
 <p>I couldn't agree more...
-  <br>This is mainly because of the excessive macros use and other
+  <br>This is mainly because of the excessive use of macros and other
   small improvements that damages the code readability.
   <br>I would not have done this changes ifthe main objective wasn't performance</p>
 
