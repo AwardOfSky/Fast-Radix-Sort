@@ -69,6 +69,10 @@ of the box.</p>
 
 <h4><b>Different sign arrays:</b></h4>
 
+<p>The greater the difference beetween the number of negative and positive elements, the slower the algorithm gets.
+<br>Here is portraited the worst case scenario (just one number with a different sign).</p>
+
+
 |_Elements_      | 32 bits   | 24 bits  | 16 bits  | 8 bits   |
 |:---------------|----------:|---------:|---------:|---------:|
 |**1 Billion**   | 10.172354 | 8.473708 | 6.144303 | 3.913641 |
