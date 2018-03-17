@@ -110,7 +110,7 @@ int array_sorted(int vector[], int size) {
   3 - The indexes of the buckets express the amount of elements of that respective
       index in the original array. There is also a array of pointers so that
       each pointer has the adress in the helper array where the given offset
-      should start
+      should start.
    
   4 - As there are only 4 iterations at max (for a 32 bit integer at least),
       instead of copying the whole helper array to the original at the end of 
