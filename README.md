@@ -28,11 +28,10 @@ of the box.</p>
   <li>Small preliminary check of the initial unsorted array to determine
       number of bytes to sort. Special useful in randomly shuffled arrays.</li>
 <br>
-  <li>The indexes of the buckets don't necessarily express the cumulative
-      value of the occurrence of that given offset in the original array
-      but rather the index at witch that ofsset starts in the array. This allows 
-      for a much faster array traversal as it goes in ascending order and makes
-      use of the sufix ++.</li>
+  <li>The indexes of the buckets express the amount of elements of that respective
+      index in the original array. There is also a array of pointers so that
+      each pointer has the adress in the helper array where the given offset
+      should start.</li>
    <br>
   <li>As there are only 4 iterations at max (for a 32 bit integer at least),
       instead of copying the whole helper array to the original at the end of 
