@@ -11,9 +11,6 @@
 #include <string.h>
 #include <time.h>
 
-#define MAX_INT 2147483647
-#define MAX_INT_24 16777215
-
 int array_sorted(int vector[], int size);
 void int_radix_sort(register int vector[], register const int size, int same_sign);
 
@@ -24,7 +21,7 @@ int main(int argc, char * argv []) {
     srand(time(NULL));
     clock_t start, end;
     int size = 100000000;
-    int num_max = MAX_INT;
+    int num_max = 2147483647;
     int num_min = 0;
     int i, temp, same_sign;
 
@@ -110,11 +107,10 @@ int array_sorted(int vector[], int size) {
   2 - Small preliminary check of the initial unsorted array to determine
       number of bytes to sort. Special useful in randomly shuffled arrays.
 
-  3 - The indexes of the buckets don't necessarily express the cumulative
-      value of the occurrence of that given offset in the original array
-      but rather the index at witch that ofsset starts in the array. This allows 
-      for a much faster array traversal as it goes in ascending order and makes
-      use of the sufix ++.
+  3 - The indexes of the buckets express the amount of elements of that respective
+      index in the original array. There is also a array of pointers so that
+      each pointer has the adress in the helper array where the given offset
+      should start
    
   4 - As there are only 4 iterations at max (for a 32 bit integer at least),
       instead of copying the whole helper array to the original at the end of 
@@ -136,12 +132,15 @@ int array_sorted(int vector[], int size) {
   segments, prefix increments rather than sufix (if possible), registers, etc
 
  */
+
+
 void int_radix_sort(register int vector[], register const int size, int same_sign) {
 
     /* Define standard preliminar, abs and expression to check if all bytes are sorted */
 #define PRELIMINARY__ 100
 #define ABS__(x) (((x) < 0) ? -(x) : (x))
-#define MISSING_BITS__ exp < 32 && (max >> exp) > 0
+#define MAX_UINT__ ((((1 << ((sizeof(int) << 3) - 2)) - 1) << 1) + 1)
+#define MISSING_BITS__ exp < (sizeof(int) << 3) && (max >> exp) > 0
     /* Define array segment to search max number */
 #define CHECK_MAX__(a, b)			\
     if(same_sign && *vector >= 0) {		\
@@ -161,11 +160,13 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
 
     /* b = helper array pointer ; s and k = array iterators */
     /* exp = bits sorted, max = maximun number in array     */
+    /* point = array of pointers to the helper array        */
     register int *b, *s, *k;
     register int exp = 0;
     register int max = *vector;
-    int preliminary;
-    
+    int preliminary, i;
+    int *point[0x100];
+	
     /* Set preliminar according to size */
     if(size > PRELIMINARY__) {
 	preliminary = PRELIMINARY__;
@@ -176,8 +177,8 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
     /* If we found a integer with more than 24 bits in preliminar, */
     /* will have to sort all 4 bytes either way, so max = MAX_INT  */
     CHECK_MAX__(0, preliminary);
-    if(ABS__(max) > MAX_INT_24) {
-    	max = MAX_INT;
+    if(ABS__(max) > (MAX_UINT__ >> 7)) {
+    	max = MAX_UINT__;
     } else {
 	CHECK_MAX__(preliminary, size);
     }
@@ -186,53 +187,51 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
     /* Helper array declaration */
     b = (int *)malloc(sizeof(int) * size);
     
-    /* Check if last byte sorted was odd */
-#define BYTE_IS_ODD__ ((exp >> 3) & 1)
-
     /* Core algorithm: for a specific byte, fill the buckets array, */
     /* rearrange the array and reset the initial array accordingly. */
-#define SORT_BYTE__(bu, vet, bb, xp)			\
-    int bu[256] = {0};					\
-    for(s = vet, k = &vet[size]; s < k; ++s) {		\
-	bu[(*s xp) & 0xFF]++;				\
-    }							\
-    for(s = &bu[1], k = &bu[256]; s < k; ++s) {		\
-	*s += *(s - 1);					\
-    }							\
-    memmove(bu + 1, bu, sizeof(int) * 255);		\
-    *bu = 0;						\
-    for(s = vet, k = &vet[size]; s < k; ++s) {		\
-	bb[bu[(*s xp) & 0xFF]++] = *s;			\
-    }							\
+#define BYTE_IS_ODD__ ((exp >> 3) & 1)
+#define SORT_BYTE__(vec, bb, shift)					\
+    int bucket[0x100] = {0};						\
+    for(s = vec, k = &vec[size]; s < k; ++s) {				\
+	bucket[(*s shift) & 0xFF]++;					\
+    }									\
+    s = bb;								\
+    for(i = 0; i < 0x100; s += bucket[i++]) {				\
+	point[i] = s;							\
+    }									\
+    for(s = vec, k = &vec[size]; s < k; ++s) {				\
+	*point[(*s shift) & 0xFF]++ = *s;				\
+    }									\
     exp += 8;
 
     /* Sort each byte (if needed) */
-    SORT_BYTE__(bucket, vector, b, );
-    if(MISSING_BITS__) {
-	SORT_BYTE__(bucket1, b, vector, >> exp);
-	if(MISSING_BITS__) {
-	    SORT_BYTE__(bucket2, vector, b, >> exp);
-	    if(MISSING_BITS__) {
-		SORT_BYTE__(bucket3, b, vector, >> exp);
+    while(MISSING_BITS__) {
+	if(exp) {
+	    if(BYTE_IS_ODD__) {
+		SORT_BYTE__(b, vector, >> exp);
+	    } else {
+		SORT_BYTE__(vector, b, >> exp);
 	    }
+	} else {
+	    SORT_BYTE__(vector, b, );
 	}
     }
-
-    /* If last byte sorted was even, the sorted array will be the helper, */
-    /* Therefore we will have to put it in the original array             */
+    
+    /* If last byte sorted was odd, the sorted array will be the helper, */
+    /* Therefore we will have to put it in the original array            */
     if(BYTE_IS_ODD__) {
 	memcpy(vector, b, sizeof(int) * size);
     }
-
+    
     /* In case the array has both negative and positive integers, find the      */
     /* index of the first negative integer and put it in the start of the array */
-    if(!same_sign) {
+    if(!same_sign && (*vector ^ vector[size - 1]) < 0) {
 	if(!BYTE_IS_ODD__) {
 	    memcpy(b, vector, sizeof(int) * size);
 	}
 
 	int offset = size - 1;
-    	int tminusoff;	
+    	int tminusoff;
 	for(s = b, k = &b[size]; s < k && *s >= 0; ++s) { }
 	offset = s - b;
 	tminusoff = size - offset;
@@ -243,14 +242,15 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
 
     /* Free helper array */
     free(b);
-
+    
     /* Undefine function scoped macros for eventual later use */
 #undef PRELIMINARY__
 #undef MISSING_BITS__
 #undef ABS__
+#undef MAX_UINT__
 #undef CHECK_MAX__
 #undef LOOP_MAX__
 #undef SORT_BYTE__
-#undef BYTE_IS_EVEN__
-
+#undef BYTE_IS_ODD__
+    
 }
