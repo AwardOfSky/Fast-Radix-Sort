@@ -23,7 +23,7 @@ int main(int argc, char * argv []) {
     int size = 100000000;
     int num_max = 2147483647;
     int num_min = 0;
-    int i, temp, same_sign;
+    int i, temp;
 
     /* User input */
     printf("Enter the number of elements: ");
@@ -47,13 +47,6 @@ int main(int argc, char * argv []) {
     int *a = (int *)malloc(sizeof(int) * size);
     for(i = 0; i < size; ++i) {
 	a[i] = (rand() % (num_max - num_min)) + num_min;
-    }
-    
-    /* Set the sign flag (this is optional in real case scenarios) */
-    if(num_min < 0 && num_max > 0) {
-	same_sign = 0;
-    } else {
-	same_sign = 1;
     }
 
     /* Time sort function execution */
