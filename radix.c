@@ -12,7 +12,7 @@
 #include <time.h>
 
 int array_sorted(int vector[], int size);
-void int_radix_sort(register int vector[], register const int size, int same_sign);
+void int_radix_sort(register int vector[], register const int size);
 
 /* Small functionality test */
 int main(int argc, char * argv []) {
@@ -48,7 +48,7 @@ int main(int argc, char * argv []) {
     for(i = 0; i < size; ++i) {
 	a[i] = (rand() % (num_max - num_min)) + num_min;
     }
-
+    
     /* Set the sign flag (this is optional in real case scenarios) */
     if(num_min < 0 && num_max > 0) {
 	same_sign = 0;
@@ -58,7 +58,7 @@ int main(int argc, char * argv []) {
 
     /* Time sort function execution */
     start = clock();
-    int_radix_sort(a, size, same_sign);
+    int_radix_sort(a, size);
     end = clock();
 
     /* Print results */
@@ -70,7 +70,7 @@ int main(int argc, char * argv []) {
     } else {
     	printf("The array wasn't fully sorted. Please report this problem!\n");
     }
-    
+
     return 0;
 }
 
@@ -93,12 +93,8 @@ int array_sorted(int vector[], int size) {
   
   vector[] - Pointer to the orginal array of integers
   size     - Size of the array to sort
-  samesign - Wether the orignal array contains both positive and negative integers.
-             Set this parameter to 0 if not (or not sure), and to 1 otherwise.
-	     This parameter is mostly here to squeeze some performance (same sign
-	     arrays happen frequently in real case scenarios).
-
-  ---List of optimizations implemented---
+ 
+ ---List of optimizations implemented---
 
   1 - Use of powers of 2 for the expoents and bucket size in order to use
       shift and bitwise operations (expoent = 8 in order to sort 1 byte per iteration).
@@ -132,29 +128,23 @@ int array_sorted(int vector[], int size) {
   segments, prefix increments rather than sufix (if possible), registers, etc
 
  */
+void int_radix_sort(register int vector[], register const int size) {
 
-
-void int_radix_sort(register int vector[], register const int size, int same_sign) {
-
-    /* Define standard preliminar, abs and expression to check if all bytes are sorted */
+    /* Support for variable sized integers without overflow warnings */
+    const int MAX_UINT__ = ((((1 << ((sizeof(int) << 3) - 2)) - 1) << 1) + 1);
+    
+    /* Define standard preliminar, constrain and expression to check if all bytes are sorted */
 #define PRELIMINARY__ 100
-#define ABS__(x) (((x) < 0) ? -(x) : (x))
-#define MAX_UINT__ ((((1 << ((sizeof(int) << 3) - 2)) - 1) << 1) + 1)
+#define CONSTRAIN__(a, b, n) ((n) < (a) ? (a) : ((n) > (b) ? (b) : (n)))
 #define MISSING_BITS__ exp < (sizeof(int) << 3) && (max >> exp) > 0
-    /* Define array segment to search max number */
-#define CHECK_MAX__(a, b)			\
-    if(same_sign && *vector >= 0) {		\
-	LOOP_MAX__(>, *s, a, b);		\
-    } else if(same_sign && *vector < 0) {	\
-	LOOP_MAX__(<, *s, a, b);		\
-    } else {					\
-	LOOP_MAX__(>, ABS__(*s), a, b);		\
-    }
-    /* Check for biggest integer in [a, b] array segment */
-#define LOOP_MAX__(S, V, a, b)				\
+    /* Check for biggest integer in [a, b[ array segment */
+#define LOOP_MAX__(a, b)				\
     for(s = &vector[a], k = &vector[b]; s < k; ++s) {	\
-	if((V) S max) {					\
-	    max = (V);					\
+	if(*s > max) {					\
+	    max = *s;					\
+	}						\
+	if(*s < exp) {					\
+	    exp = *s;					\
 	}						\
     }
 
@@ -162,12 +152,12 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
     /* exp = bits sorted, max = maximun number in array     */
     /* point = array of pointers to the helper array        */
     register int *b, *s, *k;
-    register int exp = 0;
-    register int max = *vector;
+    register int exp = *vector;
+    register int max = exp;
     int preliminary, i;
     int *point[0x100];
-	
-    /* Set preliminar according to size */
+    
+    /* Set preliminary according to size */
     if(size > PRELIMINARY__) {
 	preliminary = PRELIMINARY__;
     } else {
@@ -175,16 +165,17 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
     }
 
     /* If we found a integer with more than 24 bits in preliminar, */
-    /* will have to sort all 4 bytes either way, so max = MAX_INT  */
-    CHECK_MAX__(0, preliminary);
-    if(ABS__(max) > (MAX_UINT__ >> 7)) {
+    /* will have to sort all bytes either way, so max = MAX_UINT__ */
+    LOOP_MAX__(1, preliminary);
+    if(CONSTRAIN__(0, MAX_UINT__, (unsigned int)(max - exp)) > (MAX_UINT__ >> 7)) {
     	max = MAX_UINT__;
     } else {
-	CHECK_MAX__(preliminary, size);
+	LOOP_MAX__(preliminary, size);
     }
-    max = ABS__(max);
+    max = CONSTRAIN__(0, MAX_UINT__, (unsigned int)(max - exp));
+    exp = 0;
     
-    /* Helper array declaration */
+    /* Helper array initialization */
     b = (int *)malloc(sizeof(int) * size);
     
     /* Core algorithm: for a specific byte, fill the buckets array, */
@@ -216,16 +207,16 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
 	    SORT_BYTE__(vector, b, );
 	}
     }
-    
     /* If last byte sorted was odd, the sorted array will be the helper, */
     /* Therefore we will have to put it in the original array            */
     if(BYTE_IS_ODD__) {
+	//printf("Ahoy debugger!\n");
 	memcpy(vector, b, sizeof(int) * size);
     }
     
     /* In case the array has both negative and positive integers, find the      */
     /* index of the first negative integer and put it in the start of the array */
-    if(!same_sign && (*vector ^ vector[size - 1]) < 0) {
+    if((*vector ^ vector[size - 1]) < 0) {
 	if(!BYTE_IS_ODD__) {
 	    memcpy(b, vector, sizeof(int) * size);
 	}
@@ -245,10 +236,8 @@ void int_radix_sort(register int vector[], register const int size, int same_sig
     
     /* Undefine function scoped macros for eventual later use */
 #undef PRELIMINARY__
+#undef CONSTRAIN__
 #undef MISSING_BITS__
-#undef ABS__
-#undef MAX_UINT__
-#undef CHECK_MAX__
 #undef LOOP_MAX__
 #undef SORT_BYTE__
 #undef BYTE_IS_ODD__
