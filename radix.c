@@ -203,7 +203,6 @@ void int_radix_sort(register int vector[], register const int size) {
     /* If last byte sorted was odd, the sorted array will be the helper, */
     /* Therefore we will have to put it in the original array            */
     if(BYTE_IS_ODD__) {
-	//printf("Ahoy debugger!\n");
 	memcpy(vector, b, sizeof(int) * size);
     }
     
