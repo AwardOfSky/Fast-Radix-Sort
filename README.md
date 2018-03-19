@@ -1,4 +1,4 @@
-# Optimized-Radix-Sort
+# Fast-Radix-Sort
 An optimized implementation of the Radix LSD sorting algorithm for integers, written in C.
 
 <h2><b>Algorithm:</b></h2>
