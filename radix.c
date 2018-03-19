@@ -48,12 +48,12 @@ int main(int argc, char * argv []) {
     for(i = 0; i < size; ++i) {
 	a[i] = (rand() % (num_max - num_min)) + num_min;
     }
-
+        
     /* Time sort function execution */
     start = clock();
     int_radix_sort(a, size);
     end = clock();
-
+  
     /* Print results */
     printf("\nRadix sort took %.6f seconds.\n[sorted %d numbers from %d to %d].\n",
 	   (double)(end - start) / CLOCKS_PER_SEC, size, num_min, num_max);
@@ -64,6 +64,8 @@ int main(int argc, char * argv []) {
     	printf("The array wasn't fully sorted. Please report this problem!\n");
     }
 
+    free(a);
+    
     return 0;
 }
 
@@ -126,7 +128,7 @@ void int_radix_sort(register int vector[], register const int size) {
     /* Support for variable sized integers without overflow warnings */
     const int MAX_UINT__ = ((((1 << ((sizeof(int) << 3) - 2)) - 1) << 1) + 1);
     
-    /* Define standard preliminar, constrain and expression to check if all bytes are sorted */
+    /* Define std preliminary, constrain and expression to check if all bytes are sorted */
 #define PRELIMINARY__ 100
 #define CONSTRAIN__(a, b, n) ((n) < (a) ? (a) : ((n) > (b) ? (b) : (n)))
 #define MISSING_BITS__ exp < (sizeof(int) << 3) && (max >> exp) > 0
@@ -200,30 +202,43 @@ void int_radix_sort(register int vector[], register const int size) {
 	    SORT_BYTE__(vector, b, );
 	}
     }
-	
-    /* If last byte sorted was odd, the sorted array will be the helper, */
-    /* Therefore we will have to put it in the original array            */
-    if(BYTE_IS_ODD__) {
+
+    /* In case the array has both negative and positive integers, find the      */
+    /* index of the first negative integer and put it in the start of the array */
+    if(((*vector ^ vector[size - 1]) < 0 && !BYTE_IS_ODD__) ||
+       ((*b ^ b[size - 1]) < 0 && BYTE_IS_ODD__)) {
+	int offset = size - 1;
+    	int tminusoff;
+
+	if(!BYTE_IS_ODD__)  {
+	    for(s = vector, k = &vector[size]; s < k && *s >= 0; ++s) { }
+	    offset = s - vector;
+
+	    tminusoff = size - offset;
+
+	    if(offset < tminusoff) {
+		memcpy(b, vector, sizeof(int) * offset);
+		memcpy(vector, vector + offset, sizeof(int) * tminusoff);
+		memcpy(vector + tminusoff, b, sizeof(int) * offset);
+	    } else {
+		memcpy(b, vector + offset, sizeof(int) * tminusoff);
+		memmove(vector + tminusoff, vector, sizeof(int) * offset);
+		memcpy(vector, b, sizeof(int) * tminusoff);
+	    }
+	} else {
+	    for(s = b, k = &b[size]; s < k && *s >= 0; ++s) { }
+	    offset = s - b;
+
+	    tminusoff = size - offset;
+
+	    memcpy(vector, b + offset, sizeof(int) * tminusoff);
+	    memcpy(vector + tminusoff, b, sizeof(int) * (size - tminusoff));	
+	}
+
+    } else if(BYTE_IS_ODD__) {
 	memcpy(vector, b, sizeof(int) * size);
     }
     
-    /* In case the array has both negative and positive integers, find the      */
-    /* index of the first negative integer and put it in the start of the array */
-    if((*vector ^ vector[size - 1]) < 0) {
-	if(!BYTE_IS_ODD__) {
-	    memcpy(b, vector, sizeof(int) * size);
-	}
-
-	int offset = size - 1;
-    	int tminusoff;
-	for(s = b, k = &b[size]; s < k && *s >= 0; ++s) { }
-	offset = s - b;
-	tminusoff = size - offset;
-
-	memcpy(vector, b + offset, sizeof(int) * tminusoff);
-	memcpy(vector + tminusoff, b, sizeof(int) * (size - tminusoff));	
-    }
-
     /* Free helper array */
     free(b);
     
