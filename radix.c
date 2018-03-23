@@ -32,7 +32,7 @@ int main(int argc, char * argv []) {
     printf("Enter the maximun number: ");
     scanf("%d", &num_max);
 
-    /* Check inconsistensies and constrains */
+    /* Check for inconsistensies and constrains */
     if(num_min > num_max) {
 	temp = num_min;
 	num_min = num_max;
@@ -141,9 +141,9 @@ void int_radix_sort(register int vector[], register const int size) {
 	}						\
     }
     
-    /* b = helper array pointer ; s and k = array iterators */
-    /* exp = bits sorted, max = maximun number in array     */
-    /* point = array of pointers to the helper array        */
+    /* b = helper array pointer ; s, k and i = array iterators */
+    /* exp = bits sorted, max = maximun range in array         */
+    /* point = array of pointers to the helper array           */
     register int *b, *s, *k;
     register int exp = *vector;
     register int max = exp;
