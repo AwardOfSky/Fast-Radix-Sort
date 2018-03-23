@@ -3,7 +3,6 @@
   and has backwards compatibility with C89 (flag -std=c89).
   No compiler specific directives or architecture intrinsics
   were used.
-
   Compile with: gcc -Wall radix.c -o radix 
 */
 #include <stdio.h>
@@ -81,8 +80,7 @@ int array_sorted(int vector[], int size) {
 }
 
 /*
-  This function will perform an optimized version of 
-  Radix LSD sort (not in place).
+  Integer Radix LSD sort. Stable and out-of-place.
 
   ---Parameters---
   
@@ -121,7 +119,6 @@ int array_sorted(int vector[], int size) {
   the use (and abuse!) of macros, traversing the array with pointers instead of
   indexes, use of standard C functions like memcpy to efficiently copy arrays
   segments, prefix increments rather than sufix (if possible), registers, etc
-
  */
 void int_radix_sort(register int vector[], register const int size) {
 
@@ -135,36 +132,30 @@ void int_radix_sort(register int vector[], register const int size) {
     /* Check for biggest integer in [a, b[ array segment */
 #define LOOP_MAX__(a, b)				\
     for(s = &vector[a], k = &vector[b]; s < k; ++s) {	\
-	if(*s > max) {					\
-	    max = *s;					\
-	}						\
-	if(*s < exp) {					\
-	    exp = *s;					\
+	if(*s > max || *s < exp) {			\
+	    if(*s > max)  {				\
+		max = *s;				\
+	    } else{					\
+		exp = *s;				\
+	    }						\
 	}						\
     }
-
+    
     /* b = helper array pointer ; s and k = array iterators */
     /* exp = bits sorted, max = maximun number in array     */
     /* point = array of pointers to the helper array        */
     register int *b, *s, *k;
     register int exp = *vector;
     register int max = exp;
-    int preliminary, i;
-    int *point[0x100];
+    int i, *point[0x100];
     
     /* Set preliminary according to size */
-    if(size > PRELIMINARY__) {
-	preliminary = PRELIMINARY__;
-    } else {
-	preliminary = size >> 3;
-    }
-
+    const int preliminary = (size > PRELIMINARY__) ? PRELIMINARY__ : (size >> 3);
+    
     /* If we found a integer with more than 24 bits in preliminar, */
     /* will have to sort all bytes either way, so max = MAX_UINT__ */
     LOOP_MAX__(1, preliminary);
-    if(CONSTRAIN__(0, MAX_UINT__, (unsigned int)(max - exp)) > (MAX_UINT__ >> 7)) {
-    	max = MAX_UINT__;
-    } else {
+    if(CONSTRAIN__(0, MAX_UINT__, (unsigned int)(max - exp)) <= (MAX_UINT__ >> 7)) {	
 	LOOP_MAX__(preliminary, size);
     }
     max = CONSTRAIN__(0, MAX_UINT__, (unsigned int)(max - exp));
