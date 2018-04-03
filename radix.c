@@ -50,7 +50,7 @@ int main(int argc, char * argv []) {
         
     /* Time sort function execution */
     start = clock();
-    int_radix_sort1(a, size);
+    int_radix_sort(a, size);
     end = clock();
   
     /* Print results */
