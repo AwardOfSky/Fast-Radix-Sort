@@ -1,5 +1,5 @@
 /* 
-     This program was tested with GCC 5.4.0 on Ubuntu 16.04
+  This program was tested with GCC 5.4.0 on Ubuntu 16.04
   and has backwards compatibility with C89 (flag -std=c89).
   No compiler specific directives or architecture intrinsics
   were used.
@@ -22,7 +22,7 @@ int main(int argc, char * argv []) {
     int size = 100000000;
     int num_max = 2147483647;
     int num_min = 0;
-    int i, temp;
+    int i;
 
     /* User input */
     printf("Enter the number of elements: ");
@@ -34,7 +34,7 @@ int main(int argc, char * argv []) {
 
     /* Check for inconsistensies and constrains */
     if(num_min > num_max) {
-	temp = num_min;
+	int temp = num_min;
 	num_min = num_max;
 	num_max = temp;
     }
