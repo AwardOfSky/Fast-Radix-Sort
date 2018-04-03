@@ -50,7 +50,7 @@ int main(int argc, char * argv []) {
         
     /* Time sort function execution */
     start = clock();
-    int_radix_sort(a, size);
+    int_radix_sort1(a, size);
     end = clock();
   
     /* Print results */
@@ -169,8 +169,10 @@ void int_radix_sort(register int vector[], register const int size) {
 #define BYTE_IS_ODD__ ((exp >> 3) & 1)
 #define SORT_BYTE__(vec, bb, shift)					\
     int bucket[0x100] = {0};						\
-    for(s = vec, k = &vec[size]; s < k; ++s) {				\
-	bucket[(*s shift) & 0xFF]++;					\
+    register unsigned char *n, *m = (unsigned char *)(&vec[size]);	\
+    for(n = (unsigned char *)(vec) + (exp >> 3);			\
+	n < m; n += sizeof(int)) {					\
+	bucket[*n]++;							\
     }									\
     s = bb;								\
     for(i = 0; i < 0x100; s += bucket[i++]) {				\
