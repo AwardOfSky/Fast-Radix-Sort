@@ -47,38 +47,9 @@ of the box.</p>
   <li>Neglecting the shift operation when sorting the first byte (equals >> 0).</li>
 </ul>      
 
-<h2><b>Benchmarks:</b></h2>
-<p>All benchamrks were performed on a Intel Core-i7 6700, running Ubuntu 16.04.9.
-<br>The program was compiled with GCC 5.4.0-6, with no compiler otimizations enabled.</p>
-
-**Rows** = Number of elements in the array<br>
-**Columns** = Number of bits that the element with the maximun value in the array has
-
 <p>Mind that as the algorithm works byte per byte, having 1 bit or 8 bits maximun is the same timewise.
 <br>The time values are measured in seconds.
 <br>This benchmarks were performed on randomly shuffled arrays.</p>
-
-<h4><b>Same sign arrays:</b></h4>
-
-|_Elements_      | 32 bits  | 24 bits  | 16 bits  | 8 bits   |
-|:---------------|---------:|---------:|---------:|---------:|
-|**1 Billion**   | 9.526307 | 8.196153 | 5.582001 | 3.656286 |
-|**100 million** | 0.948754 | 0.812009 | 0.554831 | 0.360952 |
-|**10 million**  | 0.094950 | 0.081082 | 0.055406 | 0.035727 |
-|**1 million**   | 0.008333 | 0.006910 | 0.004460 | 0.002471 |
-
-<h4><b>Different sign arrays:</b></h4>
-
-<p>The greater the difference beetween the number of negative and positive elements, the slower the algorithm gets.
-<br>Here is portraited the worst case scenario (just one number with a different sign).</p>
-
-
-|_Elements_      | 32 bits   | 24 bits  | 16 bits  | 8 bits   |
-|:---------------|----------:|---------:|---------:|---------:|
-|**1 Billion**   | 10.172354 | 8.473708 | 6.144303 | 3.913641 |
-|**100 million** | 1.001939  | 0.840281 | 0.607891 | 0.386767 |
-|**10 million**  | 0.100724  | 0.084023 | 0.061230 | 0.038532 |
-|**1 million**   | 0.008700  | 0.007040 | 0.004784 | 0.002616 |
 
 <h2><b>Use and compilation:</b></h2>
 <p>Provided you are in a Linux based OS, enter the following commands in your terminal:</p>
