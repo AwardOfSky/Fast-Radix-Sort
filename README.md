@@ -47,9 +47,7 @@ of the box.</p>
   <li>Neglecting the shift operation when sorting the first byte (equals >> 0).</li>
 </ul>      
 
-<p>Mind that as the algorithm works byte per byte, having 1 bit or 8 bits maximun is the same timewise.
-<br>The time values are measured in seconds.
-<br>This benchmarks were performed on randomly shuffled arrays.</p>
+<p>Mind that as the algorithm works byte per byte, having 1 bit or 8 bits maximun is the same timewise.</p>
 
 <h2><b>Use and compilation:</b></h2>
 <p>Provided you are in a Linux based OS, enter the following commands in your terminal:</p>
