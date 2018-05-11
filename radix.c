@@ -172,7 +172,7 @@ void int_radix_sort(register int vector[], register const int size) {
     register unsigned char *n, *m = (unsigned char *)(&vec[size]);	\
     for(n = (unsigned char *)(vec) + (exp >> 3);			\
 	n < m; n += sizeof(int)) {					\
-	bucket[*n]++;							\
+	++bucket[*n];							\
     }									\
     s = bb;								\
     for(i = 0; i < 0x100; s += bucket[i++]) {				\
