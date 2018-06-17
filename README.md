@@ -42,8 +42,8 @@ of the box.</p>
   <li>The algorithms is the same even if the original array contains integers
       of different signs. The only thing we have to do at the end is starting
       from the negative numbers instead (in case of different signs). This task
-      has a relatively small overhead as it is done with the hell of memcpy and
-      memmove. This only applies if we're not sorting all the bytes (see last point)!</li>
+      has a relatively small overhead as it is done with the help of memcpy and
+      memmove.<p>This only applies if we're not sorting all the bytes (see last point)!</li>
 <br>
   <li>Neglecting the shift operation when sorting the first byte (equals >> 0).</li>
 <br>
