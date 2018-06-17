@@ -3,7 +3,7 @@ An optimized implementation of the Radix LSD sorting algorithm for integers, wri
 
 <h2><b>Algorithm:</b></h2>
 <p>Radix Sort is a non-comparative sorting algorithm able to sort a list of N integers in <b>O(kn) time</b> complexity.
-<br>The presented program showcases an implementation of said algorithm written in <b>ANSI</b> C and optimized for speed.</p>
+<br>The presented program showcases an implementation of said algorithm written in <b>ANSI C</b> and optimized for speed.</p>
 <p>The function sorts 32-bit <b>integers (signed or unsigned)</b>, one byte at a time (a bit like the American Flag sorting,
 <br>but starting with the Least Significant Digit/Byte).</p>
 <p>Radix sort is a <b>stable</b> sorting, meaning every two numbers with the same value appear in the same order in the
