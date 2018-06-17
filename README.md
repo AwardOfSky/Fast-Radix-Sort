@@ -45,6 +45,14 @@ of the box.</p>
       has a relatively small overhead.</li>
 <br>
   <li>Neglecting the shift operation when sorting the first byte (equals >> 0).</li>
+<br>
+  <li>If we have to sort all bytes either way, we can deal with negative numbers by 
+      splitting the for loop that assign the pointers to the helper array in half.
+      This works because the last bit is the sign bit, thus in the last byte the negative
+      numbers will correspond to the buckets with an iindex higher that 128.
+      Although a small improvement this allows for sorting negative and positive integers
+      in the same time complexity if sorting all bytes, bringing down the time for the worst
+      case scenario in a random shuffled array.</li>
 </ul>      
 
 <p>Mind that as the algorithm works byte per byte, having 1 bit or 8 bits maximun is the same timewise.</p>
@@ -58,9 +66,9 @@ of the box.</p>
 
 <h4><b>The code looks ugly!</b></h4>
 <p>I couldn't agree more...
-  <br>This is mainly because of the excessive use of macros and other
+  <br>This is mainly because of the excessive use of microptimizations, macros and other
   small improvements that damages the code readability.
-  <br>I would not have done this changes if the main objective wasn't performance</p>
+  <br>Keep in mind the main objective is performance.</p>
 
 <h4><b>Further improvement:</b></h4>
 <p>This algorithm still has space for improving and if you want to optimize it further
