@@ -8,8 +8,8 @@ An optimized implementation of the Radix LSD sorting algorithm for integers, wri
 <br>but starting with the Least Significant Digit/Byte).</p>
 <p>Radix sort is a <b>stable</b> sorting, meaning every two numbers with the same value appear in the same order in the
    sorted output as they appear in the input.</p>
-<p>This implementation follows an <b>out-of-place</b> approach, meaning it uses an helper array in order to successfully sort
-  the original vector of integers.</p>
+<p>This implementation follows an <b>out-of-place</b> approach, meaning it uses an helper array in order to sort
+  the original array.</p>
 <p>The program supports all main C compilers (GCC, Clang, MCVS, ...) and architectures.
 <p>For more information about the algorithm itself check the
 <a href="https://en.wikipedia.org/wiki/Radix_sort">Wikipedia Page</a>.</p>
