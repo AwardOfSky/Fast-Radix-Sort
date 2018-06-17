@@ -18,7 +18,7 @@ An optimized implementation of the Radix LSD sorting algorithm for integers, wri
 
 <p>The sorting function was made without the help of compiler optimizations in mind.
 <br>Therefore, it uses some microtimizations like macros and registers to speed some things up.
-<br>Be mindful that compilers like GCC don't provide full-fledged optimizations unless told otherwise.
+<br>Be mindful that compilers like GCC don't provide full-fledged optimizations unless told so.
 <br>The ideia is to just include the function in your program and get the performance right out
 of the box.</p>
 
