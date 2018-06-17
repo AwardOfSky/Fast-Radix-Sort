@@ -12,7 +12,7 @@ An optimized implementation of the Radix LSD sorting algorithm for integers, wri
   the original array.</p>
 <p>The program supports all main C compilers (GCC, Clang, MCVS, ...) and architectures.
 <p>For more information about the algorithm itself, check the
-<a target="_blank" href="https://en.wikipedia.org/wiki/Radix_sort">Wikipedia Page</a>.</p>
+<a target="_tab" href="https://en.wikipedia.org/wiki/Radix_sort">Wikipedia Page</a>.</p>
 
 <h2><b>Optimizations:</b></h2>
 
