@@ -49,9 +49,9 @@ of the box.</p>
   <li>If we have to sort all bytes either way, we can deal with negative numbers by 
       splitting the for loop that assign the pointers to the helper array in half.
       This works because the last bit is the sign bit, thus in the last byte the negative
-      numbers will correspond to the buckets with an iindex higher that 128.
+      numbers will correspond to the buckets with an index higher that 128.
       Although a small improvement this allows for sorting negative and positive integers
-      in the same time complexity if sorting all bytes, bringing down the time for the worst
+      in the same time complexity (if sorting all bytes), bringing down the time for the worst
       case scenario in a random shuffled array.</li>
 </ul>      
 
