@@ -41,13 +41,16 @@ of the box.</p>
       in order to reduce copying overhead (eventually correcting this at the
       end if it stops in a even number of bytes).</li>
 <br>
+  <li>Neglecting the shift operation when sorting the first byte (equals >> 0).</li>
+<br>
   <li>The algorithms is the same even if the original array contains integers
       of different signs. The only thing we have to do at the end is starting
       from the negative numbers instead (in case of different signs). This task
       has a relatively small overhead as it is done with the help of memcpy and
       memmove.<p>This only applies if we're not sorting all the bytes (see last point)!</li>
 <br>
-  <li>Neglecting the shift operation when sorting the first byte (equals >> 0).</li>
+  <li>If, when sorting a certain byte, one of the buckets has all the elements, it means
+      sorting that byte won't do anything at all in the final result, so skip ahead this byte.</li>
 <br>
   <li>If we have to sort all bytes either way, we can deal with negative numbers by 
       splitting the for loop that assign the pointers to the helper array in half.
