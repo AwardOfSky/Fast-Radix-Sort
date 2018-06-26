@@ -176,7 +176,6 @@ void int_radix_sort(register int vector[], register const int size) {
     for(i = 0; i < 0x100; ++i) {					\
 	if(bucket[i] == size) {						\
 	    next = 1;							\
-	    printf("Bucket: %d, exp :%d\n", i, exp);			\
 	    break;							\
 	}								\
     }									\
