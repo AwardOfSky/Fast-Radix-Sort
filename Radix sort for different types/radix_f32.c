@@ -17,7 +17,7 @@ void radix_f32(float array[], register const int32_t size) {
     b = (int32_t *)malloc(size << 2);
 
     /* pre-compute buckets as we are sorting all bytes either way */
-    int32_t bucket0[0x100 * sizeof(int32_t)] = {0};
+    int32_t bucket0[0x400] = {0};
     int32_t *bucket1 = bucket0 + 0x100;
     int32_t *bucket2 = bucket1 + 0x100;
     int32_t *bucket3 = bucket2 + 0x100;
