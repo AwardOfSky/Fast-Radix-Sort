@@ -216,8 +216,8 @@ void int_radix_sort(register int vector[], register const int size) {
 
     /* In case the array has both negative and positive integers, find the      */
     /* index of the first negative integer and put it in the start of the array */
-    if(exp != (LAST_EXP__ + 8) && (((*vector ^ vector[size - 1]) < 0 && !swap) ||
-				   ((*b ^ b[size - 1]) < 0 && swap))) {
+    if(exp != (LAST_EXP__ + 8) && ((!swap && (*vector ^ vector[size - 1]) < 0) ||
+				   (swap && (*b ^ b[size - 1]) < 0))) {
 	int offset = size - 1;
     	int tminusoff;
 
