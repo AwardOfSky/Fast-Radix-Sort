@@ -88,32 +88,8 @@ int array_sorted(int vector[], int size) {
   size     - Size of the array to sort
  
  ---List of optimizations implemented---
-  1 - Use of powers of 2 for the expoents and bucket size in order to use
-      shift and bitwise operations (expoent = 8 in order to sort 1 byte per iteration).
-      This works a lot like the American Flag algorithm used to sort strings.
-  2 - Small preliminary check of the initial unsorted array to determine
-      number of bytes to sort. Special useful in randomly shuffled arrays.
-  3 - The indexes of the buckets express the amount of elements of that respective
-      index in the original array. There is also a array of pointers so that
-      each pointer has the adress in the helper array where the given offset
-      should start.
-   
-  4 - As there are only 4 iterations at max (for a 32 bit integer at least),
-      instead of copying the whole helper array to the original at the end of 
-      each iteration, the algorithm switches the purpose of these two arrays
-      in order to reduce copying overhead (eventually correcting this at the
-      end if it stops in a even number of bytes).
-  5 - The algorithms is the same even if the original array contains integers
-      of different signs. The only thing we have to do at the end is starting
-      from the negative numbers instead (in case of different signs). This task
-      has a relatively small overhead.
-  6 - Neglecting the shift operation when sorting the first byte (equals >> 0).
-      
-  Adding to the main structural optimizations of the algorithm, there are a
-  number of microoptimizations to further improve performance. These include
-  the use (and abuse!) of macros, traversing the array with pointers instead of
-  indexes, use of standard C functions like memcpy to efficiently copy arrays
-  segments, prefix increments rather than sufix (if possible), registers, etc
+  For a list of all optimizations implemented check the github README.md
+  over at https://github.com/AwardOfSky/Fast-Radix-Sort
  */
 void int_radix_sort(register int vector[], register const int size) {
 
