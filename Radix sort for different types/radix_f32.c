@@ -22,17 +22,17 @@ void radix_f32(float array[], register const int32_t size) {
     int32_t *bucket2 = bucket1 + 0x100;
     int32_t *bucket3 = bucket2 + 0x100;
     
-    register unsigned char *n, *m = (unsigned char *)(&vector[size]);
-    for(n = (unsigned char *)(vector); n < m;) {
-	++bucket0[*n++];
-	++bucket1[*n++];
-	++bucket2[*n++];
-	++bucket3[*n++];
-    }
-	
-    /* Core algorithm: for a specific byte, fill the buckets array, */
-    /* rearrange the array and reset the initial array accordingly. */
-#define MISSING_BITS__ exp < 32
+    register unsigned char *n, *m = (unsigned char *)(vector);
+    for(n = (unsigned char *)(&vector[size]); n > m;) {
+    	++bucket3[*--n];
+    	++bucket2[*--n];
+    	++bucket1[*--n];
+    	++bucket0[*--n];
+    }	
+
+    /* Core algorithm: Check if already sorted, if not, arrange the */
+    /* elements according to their buckets */
+#define MISSING_BITS__ (exp < 32)
 #define SORT_BYTE__(vec, bb, shift)					\
     s = bb;								\
     int32_t *buck = bucket0 + (exp << 5);				\
@@ -64,17 +64,17 @@ void radix_f32(float array[], register const int32_t size) {
 	    *point[(*s shift) & 0xFF]++ = *s;				\
 	}								\
     } else {								\
-	for(s = vec, k = &vec[size]; s < k; ++s) {			\
-	    register int32_t index = (*s shift) & 0xFF;			\
-	    if(index >= 128) {						\
-		*--point[index] = *s;					\
+	n = (unsigned char *)(vec) + (exp >> 3);			\
+	for(s = vec, k = &vec[size]; s < k; ++s, n += 4) {		\
+	    if(*n < 128) {						\
+		*point[*n]++ = *s;					\
 	    } else {							\
-		*point[index]++ = *s;					\
+		*--point[*n] = *s;					\
 	    }								\
-	}								\
+	}                                                               \
     }									\
     swap = 1 - swap;							\
-    exp += 8;
+    exp += 8;								\
     
     /* Sort each byte (if needed) */
     while(MISSING_BITS__) {
@@ -88,6 +88,7 @@ void radix_f32(float array[], register const int32_t size) {
 	    SORT_BYTE__(vector, b, );
 	}
     }
+
 
     /* If we skipped ahead bytes and the sorted array is in the healper, */
     /* We have to copy it over to the original array*/
@@ -103,3 +104,4 @@ void radix_f32(float array[], register const int32_t size) {
 #undef SORT_BYTE__
     
 }
+

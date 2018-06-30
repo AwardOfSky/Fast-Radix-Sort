@@ -42,10 +42,16 @@ void radix_ui(register unsigned int vector[], register const unsigned int size) 
     /* rearrange the array and reset the initial array accordingly. */
 #define SORT_BYTE__(vec, bb, shift)					\
     unsigned int bucket[0x100] = {0};					\
-    register unsigned char *n, *m = (unsigned char *)(&vec[size]);	\
-    for(n = (unsigned char *)(vec) + (exp >> 3);			\
-	n < m; n += sizeof(unsigned int)) {				\
-	++bucket[*n];							\
+    register unsigned char *n = (unsigned char *)(vec) + (exp >> 3),*m; \
+    for(m = (unsigned char *)(&vec[size & 0xFFFFFFFC]); n < m;) {	\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+    }									\
+    for(n = (unsigned char *)(&vec[size & 0xFFFFFFFC]) + (exp >> 3),	\
+	    m = (unsigned char *)(&vec[size]); n < m;) {		\
+	++bucket[*n]; n += sizeof(int);					\
     }									\
     s = bb;								\
     int next = 0;							\
