@@ -161,15 +161,21 @@ void int_radix_sort(register int vector[], register const int size) {
     
     /* Helper array initialization */
     b = (int *)malloc(sizeof(int) * size);
-    
+
     /* Core algorithm: for a specific byte, fill the buckets array, */
     /* rearrange the array and reset the initial array accordingly. */
 #define SORT_BYTE__(vec, bb, shift)					\
     int bucket[0x100] = {0};						\
-    register unsigned char *n, *m = (unsigned char *)(&vec[size]);	\
-    for(n = (unsigned char *)(vec) + (exp >> 3);			\
-	n < m; n += sizeof(int)) {					\
-	++bucket[*n];							\
+    register unsigned char *n = (unsigned char *)(vec) + (exp >> 3),*m; \
+    for(m = (unsigned char *)(&vec[size & 0xFFFFFFFC]); n < m;) {	\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+    }									\
+    for(n = (unsigned char *)(&vec[size & 0xFFFFFFFC]) + (exp >> 3),	\
+	    m = (unsigned char *)(&vec[size]); n < m;) {		\
+	++bucket[*n]; n += sizeof(int);					\
     }									\
     s = bb;								\
     int next = 0;							\
@@ -216,40 +222,42 @@ void int_radix_sort(register int vector[], register const int size) {
 
     /* In case the array has both negative and positive integers, find the      */
     /* index of the first negative integer and put it in the start of the array */
-    if(exp != (LAST_EXP__ + 8) && ((!swap && (*vector ^ vector[size - 1]) < 0) ||
-				   (swap && (*b ^ b[size - 1]) < 0))) {
-	int offset = size - 1;
+    int *v = vector; /* No need to use registers here, the smaller their use, */
+    int *y = b;      /* the better. */
+    if(exp != (LAST_EXP__ + 8) && (((*v ^ v[size - 1]) < 0 && !swap) ||
+    				   ((*y ^ y[size - 1]) < 0 && swap))) {
+    	int offset = size - 1;
     	int tminusoff;
+	
+    	if(!swap)  {
+    	    for(s = v, k = &v[size]; s < k && *s >= 0; ++s) { }
+    	    offset = s - v;
 
-	if(!swap)  {
-	    for(s = vector, k = &vector[size]; s < k && *s >= 0; ++s) { }
-	    offset = s - vector;
+    	    tminusoff = size - offset;
+	    
+    	    if(offset < tminusoff) {
+    	    	memcpy(y, v, sizeof(int) * offset);
+    	    	memcpy(v, v + offset, sizeof(int) * tminusoff);
+    	    	memcpy(v + tminusoff, y, sizeof(int) * offset);
+    	    } else {
+    	    	memcpy(y, v + offset, sizeof(int) * tminusoff);
+    	    	memmove(v + tminusoff, v, sizeof(int) * offset);
+    	    	memcpy(v, y, sizeof(int) * tminusoff);
+    	    }
+    	} else {	    
+    	    for(s = y, k = &y[size]; s < k && *s >= 0; ++s) { }
+    	    offset = s - y;
 
-	    tminusoff = size - offset;
+    	    tminusoff = size - offset;
 
-	    if(offset < tminusoff) {
-		memcpy(b, vector, sizeof(int) * offset);
-		memcpy(vector, vector + offset, sizeof(int) * tminusoff);
-		memcpy(vector + tminusoff, b, sizeof(int) * offset);
-	    } else {
-		memcpy(b, vector + offset, sizeof(int) * tminusoff);
-		memmove(vector + tminusoff, vector, sizeof(int) * offset);
-		memcpy(vector, b, sizeof(int) * tminusoff);
-	    }
-	} else {
-	    for(s = b, k = &b[size]; s < k && *s >= 0; ++s) { }
-	    offset = s - b;
-
-	    tminusoff = size - offset;
-
-	    memcpy(vector, b + offset, sizeof(int) * tminusoff);
-	    memcpy(vector + tminusoff, b, sizeof(int) * (size - tminusoff));	
-	}
+    	    memcpy(v, y + offset, sizeof(int) * tminusoff);
+    	    memcpy(v + tminusoff, y, sizeof(int) * (size - tminusoff));
+    	}
 
     } else if(swap) {
-	memcpy(vector, b, sizeof(int) * size);
+    	memcpy(v, y, sizeof(int) * size);
     }
-    
+
     /* Free helper array */
     free(b);
     
