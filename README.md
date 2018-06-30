@@ -43,6 +43,8 @@ of the box.</p>
 <br>
   <li>Neglecting the shift operation when sorting the first byte (equals >> 0).</li>
 <br>
+   <li>Filling the array of buckets with a clocksize of 4 elements at a time.</li>
+<br>
   <li>The algorithms is the same even if the original array contains integers
       of different signs. The only thing we have to do at the end is starting
       from the negative numbers instead (in case of different signs). This task
