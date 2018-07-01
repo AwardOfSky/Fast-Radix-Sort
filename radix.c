@@ -11,7 +11,7 @@
 #include <time.h>
 
 int array_sorted(int vector[], int size);
-void int_radix_sort(register int vector[], register const int size);
+void int_radix_sort(register int vector[], register const unsigned int size);
 
 /* Small functionality test */
 int main(int argc, char * argv []) {
@@ -91,7 +91,7 @@ int array_sorted(int vector[], int size) {
   For a list of all optimizations implemented check the github README.md
   over at https://github.com/AwardOfSky/Fast-Radix-Sort
  */
-void int_radix_sort(register int vector[], register const int size) {
+void int_radix_sort(register int vector[], register const unsigned int size) {
 
     /* Support for variable sized integers without overflow warnings */
     const int MAX_UINT__ = ((((1 << ((sizeof(int) << 3) - 2)) - 1) << 1) + 1);
