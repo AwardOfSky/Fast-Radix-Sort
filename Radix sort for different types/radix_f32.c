@@ -1,5 +1,5 @@
 
-void radix_f32(float array[], register const int32_t size) {
+void radix_f32(float array[], register const uint32_t size) {
     
     /* Floats are 4 bytes across all plataforms */
     register int32_t *vector = (int32_t *)array;
