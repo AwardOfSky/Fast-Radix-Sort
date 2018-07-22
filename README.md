@@ -24,6 +24,9 @@ of the box.</p>
 
 <ul>
 <br>
+  <li> Taking advantage of cache locaity by sorting bytes in different orders when the input
+       array is bif enought to do so. This means applying the "normal" radix algorithm in subarrays.</li>
+<br>
   <li>Use of powers of 2 for the expoents and bucket size in order to use
       shift and bitwise operations (expoent = 8 in order to sort 1 byet per iteration).
       This works a lot like the American Flag algorithm used to sort strings.</li>
