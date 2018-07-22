@@ -23,6 +23,7 @@ An optimized implementation of the Radix LSD sorting algorithm for integers, wri
 of the box.</p>
 
 <ul>
+<br>
   <li>Use of powers of 2 for the expoents and bucket size in order to use
       shift and bitwise operations (expoent = 8 in order to sort 1 byet per iteration).
       This works a lot like the American Flag algorithm used to sort strings.</li>
