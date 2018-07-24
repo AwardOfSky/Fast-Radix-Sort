@@ -94,7 +94,7 @@ int array_sorted(int vector[], int size) {
 void int_radix_sort(register int vector[], register unsigned int size) {
 
     /* Support for variable sized integers without overflow warnings */    
-#define MAX_UINT__ ((((1 << ((sizeof(int) << 3) - 2)) - 1) << 1) + 1)
+#define MAX_UINT__ ((unsigned int)(~0) >> 1)
 #define LAST_EXP__ ((sizeof(int) - 1) << 3)
     /* Define std preliminary, abosulte max value and if there are bytes left */
 #define PRELIMINARY__ 100
@@ -159,13 +159,13 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 		    pointer, ptr_init, optional_ptr_init)		\
     int bucket[0x100] = {0};						\
     n = (unsigned char *)(vector) + (exp >> 3);				\
-    for(m = (unsigned char *)(&vector[size & (~0 << 2)]); n < m;) {	\
-	++bucket[*n]; n += sizeof(int);					\
-	++bucket[*n]; n += sizeof(int);					\
-	++bucket[*n]; n += sizeof(int);					\
-	++bucket[*n]; n += sizeof(int);					\
+    for(m = (unsigned char *)(&vector[size & (~0 << 3)]); n < m;) {	\
+	++bucket[*n]; n += sizeof(int);	++bucket[*n]; n += sizeof(int);	\
+	++bucket[*n]; n += sizeof(int);	++bucket[*n]; n += sizeof(int);	\
+	++bucket[*n]; n += sizeof(int);	++bucket[*n]; n += sizeof(int);	\
+	++bucket[*n]; n += sizeof(int);	++bucket[*n]; n += sizeof(int);	\
     }									\
-    for(n = (unsigned char *)(&vector[size & (~0 << 2)]) + (exp >> 3),	\
+    for(n = (unsigned char *)(&vector[size & (~0 << 3)]) + (exp >> 3),	\
 	    m = (unsigned char *)(&vector[size]); n < m;) {		\
 	++bucket[*n]; n += sizeof(int);					\
     }									\
