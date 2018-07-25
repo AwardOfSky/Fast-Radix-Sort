@@ -91,15 +91,15 @@ int array_sorted(int vector[], int size) {
   For a list of all optimizations implemented check the github README.md
   over at https://github.com/AwardOfSky/Fast-Radix-Sort
  */
-void int_radix_sort(register int vector[], register unsigned int size) {
+void int_radix_sort(register int vector[], register int size) {
 
-    /* Support for variable sized integers without overflow warnings */    
+    /* Support for variable sized integers without overflow warnings */
 #define MAX_UINT__ ((unsigned int)(~0) >> 1)
-#define LAST_EXP__ ((sizeof(int) - 1) << 3)
+#define LAST_EXP__ (sizeof(int) << 3)
     /* Define std preliminary, abosulte max value and if there are bytes left */
 #define PRELIMINARY__ 100
 #define ABS_MAX__ ((max < -exp) ? -exp : max)
-#define MISSING_BITS__ exp < (sizeof(int) << 3) && (max >> exp) > 0
+#define MISSING_BITS__ exp < LAST_EXP__ && (max >> exp) > 0
     /* Check for biggest integer in [a, b[ array segment */
 #define LOOP_MAX__(a, b)				\
     for(s = &vector[a], k = &vector[b]; s < k; ++s) {	\
@@ -180,7 +180,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	}								\
     }									\
     if(!next) {								\
-	if(exp != LAST_EXP__) {						\
+	if(exp != (LAST_EXP__ - 8)) {					\
 	    for(i = 0; i < 0x100; s += bucket[i++]) {			\
 		ptr_init;						\
 	    }								\
@@ -214,15 +214,15 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 		    old_point[i] = point[i] = s,
 		    old_point[i] = s; point[i] = old_point[i] + size);
 	bytes_to_sort--;
-	if(exp == LAST_EXP__ + 8) {
+	if(exp == LAST_EXP__) {
 	    last_byte_sorted = 1;
 	}
-
+	
 	/* 2nd subdivision only for 3 bytes or more (and size > 512M) */
 	if(bytes_to_sort > 1 && size > 512000000) {
 
 	    exp -= 16;
-
+	    
 	    /* Same purpose as "point" and old_point" but for 2nd subdivision */
 	    int *point_2msb[0x10000] = {0};
 	    int *old_point_2msb[0x10000] = {0};
@@ -253,7 +253,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 			    old_point_2msb_rider[i] = s;
 			    point_2msb_rider[i] = old_point_2msb_rider[i] +size);
 		exp -= 8;
-
+		
 		/* Make sure the sorted array is in the original vector */
 		if(swap) {
 		    if(swap_copy) {
@@ -266,7 +266,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	    }
 	    swap = 0; /* Because now sorted array is in vector*/
 	    bytes_to_sort--;
-	    
+
 	    /* Sort remaining bytes in LSB order (65536 subdivisions) */
 	    max = 1 << ((bytes_to_sort - 1) << 3);
 	    for(j = 0; j < 0x10000; ++j) {
@@ -297,7 +297,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 			}
 		    } else {
 			SORT_BYTE__(sub_vec, sub_help, , bucket1,
-				    point, point[i] = s, );		
+				    point, point[i] = s, );
 		    }
 		}
 
@@ -349,15 +349,14 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 		    } else {
 			memcpy(sub_vec, sub_help, sizeof(int) * size);
 		    }
-		}			
+		}
 	    }
 	    swap = 0;
 	}
    	
     } else if(bytes_to_sort > 0) { /* Use normal LSB radix (no subarrays) */
 
-	/* Start at the first byte */
-	exp = 0;
+	exp = 0; /* Start at the first byte */
 
 	max = 1 << ((bytes_to_sort - 1) << 3);
 	while(MISSING_BITS__) { /* Sort until there are no bytes left */
@@ -373,9 +372,11 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 		SORT_BYTE__(vector, helper, , bucket, point,
 			    point[i] = s, );
 	    }
+
 	    if(exp == LAST_EXP__) { /* Check if last byte was sorted */
-		last_byte_sorted = 1;
+	    	last_byte_sorted = 1;
 	    }
+	    
 	}
 	
     }
@@ -385,9 +386,8 @@ void int_radix_sort(register int vector[], register unsigned int size) {
     int *h = helper;
     /* In case the array has both negative and positive integers, find the    */
     /* index of the first negative integer and put those numbers in the start */
-    if(!last_byte_sorted && exp != (LAST_EXP__ + 8)
-       && (((*v ^ v[size - 1]) < 0 && !swap) ||
-	   ((*h ^ h[size - 1]) < 0 && swap))) {
+    if(!last_byte_sorted && (((*v ^ v[size - 1]) < 0 && !swap) ||
+			     ((*h ^ h[size - 1]) < 0 && swap))) {
 
 	int offset = size - 1;
     	int tminusoff;
@@ -423,5 +423,5 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 
     /* Free helper array */
     free(helper);
-    
+
 }
