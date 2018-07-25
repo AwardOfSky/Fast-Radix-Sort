@@ -100,17 +100,12 @@ void int_radix_sort(register int vector[], register int size) {
 #define PRELIMINARY__ 100
 #define ABS_MAX__ ((max < -exp) ? -exp : max)
 #define MISSING_BITS__ exp < LAST_EXP__ && (max >> exp) > 0
-    /* Check for biggest integer in [a, b[ array segment */
+    /* Check for max and min integer in [a, b[ array segment */
 #define LOOP_MAX__(a, b)				\
     for(s = &vector[a], k = &vector[b]; s < k; ++s) {	\
-	if(*s > max || *s < exp) {			\
-	    if(*s > max)  {				\
-		max = *s;				\
-	    } else {					\
-		exp = *s;				\
-	    }						\
-	}						\
-    }
+	max = (*s > max) ? (*s) : max;			\
+	exp = (*s < exp) ? (*s) : exp;			\
+    }    
     
     register int *helper; /* Helper array */
     register int *s, *k, i, j; /* Array iterators */
