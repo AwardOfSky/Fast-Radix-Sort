@@ -91,7 +91,7 @@ int array_sorted(int vector[], int size) {
   For a list of all optimizations implemented check the github README.md
   over at https://github.com/AwardOfSky/Fast-Radix-Sort
  */
-void int_radix_sort(register int vector[], register int size) {
+void int_radix_sort(register int vector[], register unsigned int size) {
 
     /* Support for variable sized integers without overflow warnings */
 #define MAX_UINT__ ((unsigned int)(~0) >> 1)
