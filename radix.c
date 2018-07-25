@@ -106,7 +106,7 @@ void int_radix_sort(register int vector[], register int size) {
 	if(*s > max || *s < exp) {			\
 	    if(*s > max)  {				\
 		max = *s;				\
-	    } else{					\
+	    } else {					\
 		exp = *s;				\
 	    }						\
 	}						\
