@@ -97,7 +97,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 #define MAX_UINT__ ((unsigned int)(~0) >> 1)
 #define LAST_EXP__ (sizeof(int) << 3)
     /* Define std preliminary, abosulte max value and if there are bytes left */
-#define PRELIMINARY__ 100
+#define PRELIMINARY__ 64
 #define ABS_MAX__ ((max < -exp) ? -exp : max)
 #define MISSING_BITS__ exp < LAST_EXP__ && (max >> exp) > 0
     /* Check for max and min integer in [a, b[ array segment */
@@ -108,7 +108,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
     }    
     
     register int *helper; /* Helper array */
-    register int *s, *k, i, j; /* Array iterators */
+    register int *s, *k, i; /* Array iterators */
     register int exp = *vector; /* Bits sorted */
     register int max = exp;  /* Maximun range in array */
     register unsigned char *n, *m; /* Iterator of a byte within an integer */
@@ -117,13 +117,14 @@ void int_radix_sort(register int vector[], register unsigned int size) {
     int next = 0;  /* If 1 we skip the byte (all buckets are the same) */
     unsigned int init_size = size; /* Copy (needed if doing subdivisions) */
 
-    /* Preliminary index value to retrieve some initial info from the array */
-    const int preliminary = (size > PRELIMINARY__) ? PRELIMINARY__ : (size >> 3);
+    /* Preliminary value to retrieve some initial info from the array */
+    const int prel = (size > (PRELIMINARY__ << 1)) ? PRELIMINARY__ : (size >> 3);
     
     /* Get max value (to know how many bytes to sort) */
-    LOOP_MAX__(1, preliminary);
+    LOOP_MAX__(1, prel);
+    LOOP_MAX__(size - prel, size);
     if(ABS_MAX__ <= (MAX_UINT__ >> 7) || (max - exp == 0)) {
-	LOOP_MAX__(preliminary, size);
+	LOOP_MAX__(prel, size - prel);
     }
     unsigned int diff = max - exp;
     max = ABS_MAX__;
@@ -214,6 +215,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	}
 	
 	/* 2nd subdivision only for 3 bytes or more (and size > 512M) */
+	register int j;
 	if(bytes_to_sort > 1 && size > 512000000) {
 
 	    exp -= 16;
