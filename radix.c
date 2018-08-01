@@ -156,10 +156,14 @@ void int_radix_sort(register int vector[], register unsigned int size) {
     int bucket[0x100] = {0};						\
     n = (unsigned char *)(vector) + (exp >> 3);				\
     for(m = (unsigned char *)(&vector[size & (~0 << 3)]); n < m;) {	\
-	++bucket[*n]; n += sizeof(int);	++bucket[*n]; n += sizeof(int);	\
-	++bucket[*n]; n += sizeof(int);	++bucket[*n]; n += sizeof(int);	\
-	++bucket[*n]; n += sizeof(int);	++bucket[*n]; n += sizeof(int);	\
-	++bucket[*n]; n += sizeof(int);	++bucket[*n]; n += sizeof(int);	\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
+	++bucket[*n]; n += sizeof(int);					\
     }									\
     for(n = (unsigned char *)(&vector[size & (~0 << 3)]) + (exp >> 3),	\
 	    m = (unsigned char *)(&vector[size]); n < m;) {		\
@@ -188,8 +192,18 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 		ptr_init;						\
 	    }								\
 	}								\
-	for(s = vector, k = &vector[size]; s < k; ++s) {		\
-	    *pointer[(*s shift) & 0xFF]++ = *s;				\
+	for(s = vector, k = &vector[size & (~0 << 3)]; s < k;) {	\
+	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
+	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
+	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
+	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
+	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
+	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
+	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
+	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
+	}								\
+	for(s = &vector[size & (~0 << 3)], k = &vector[size]; s < k;) {	\
+	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
 	}								\
 	swap = 1 - swap;						\
     }									\
