@@ -203,7 +203,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
 	}								\
 	for(s = &vector[size & (~0 << 3)], k = &vector[size]; s < k;) {	\
-	    *pointer[(*s shift) & 0xFF]++ = *s;	++s;			\
+	    *pointer[(*s shift) & 0xFF]++ = *s; ++s;			\
 	}								\
 	swap = 1 - swap;						\
     }									\
