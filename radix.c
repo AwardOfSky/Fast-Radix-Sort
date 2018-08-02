@@ -154,7 +154,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 #define SORT_BYTE__(vector, helper, shift, bucket,			\
 		    pointer, ptr_init, optional_ptr_init)		\
     int bucket[0x100] = {0};						\
-    n = (unsigned char *)(vector) + (exp >> 3);				\
+    n = (unsigned char *)(vector) + (exp >> 3);			\
     for(m = (unsigned char *)(&vector[size & (~0 << 3)]); n < m;) {	\
 	++bucket[*n]; n += sizeof(int);					\
 	++bucket[*n]; n += sizeof(int);					\
@@ -169,7 +169,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	    m = (unsigned char *)(&vector[size]); n < m;) {		\
 	++bucket[*n]; n += sizeof(int);					\
     }									\
-    s = helper;								\
+    s = helper;							\
     next = 0;								\
     if(size > 65535) {							\
 	for(i = 0; i < 0x100 && !next; ++i) {				\
@@ -179,7 +179,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	    }								\
 	}								\
     }									\
-    if(!next) {								\
+    if(!next) {							\
 	if(exp != (LAST_EXP__ - 8)) {					\
 	    for(i = 0; i < 0x100; s += bucket[i++]) {			\
 		ptr_init;						\
