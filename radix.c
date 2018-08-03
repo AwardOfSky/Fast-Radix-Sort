@@ -134,7 +134,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
     if(diff != 0) {
 	bytes_to_sort = 1;
 	exp = 8;
-	while(exp < (sizeof(int) << 3) && (max >> (exp - 1)) > 0) {
+	while(exp < LAST_EXP__ && (max >> (exp - 1)) > 0) {
 	    bytes_to_sort++;
 	    exp += 8;
 	}
