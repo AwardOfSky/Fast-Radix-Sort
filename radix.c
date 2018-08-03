@@ -154,7 +154,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 #define SORT_BYTE__(vector, helper, shift, bucket,			\
 		    pointer, ptr_init, optional_ptr_init)		\
     int bucket[0x100] = {0};						\
-    n = (unsigned char *)(vector) + (exp >> 3);			\
+    n = (unsigned char *)(vector) + (exp >> 3);				\
     for(m = (unsigned char *)(&vector[size & (~0 << 3)]); n < m;) {	\
 	++bucket[*n]; n += sizeof(int);					\
 	++bucket[*n]; n += sizeof(int);					\
@@ -169,7 +169,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	    m = (unsigned char *)(&vector[size]); n < m;) {		\
 	++bucket[*n]; n += sizeof(int);					\
     }									\
-    s = helper;							\
+    s = helper;								\
     next = 0;								\
     if(size > 65535) {							\
 	for(i = 0; i < 0x100 && !next; ++i) {				\
@@ -179,7 +179,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	    }								\
 	}								\
     }									\
-    if(!next) {							\
+    if(!next) {								\
 	if(exp != (LAST_EXP__ - 8)) {					\
 	    for(i = 0; i < 0x100; s += bucket[i++]) {			\
 		ptr_init;						\
@@ -208,7 +208,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	swap = 1 - swap;						\
     }									\
     exp += 8;
-
+    
     int *point[0x100] = {0}; /* Array of pointers to the helper array */
 
     if(bytes_to_sort > 1 && size > 1600000) { /* MSB order (size > 1.6M) */
@@ -218,16 +218,16 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	/* old_point will serve as a copy of the initial values of "point" */
 	/* Beggining of each subarray in 1st subdivision (256 subarrays) */
 	int *old_point[0x100] = {0};
-
+	
 	/* Sort last byte */
 	SORT_BYTE__(vector, helper, >> exp, bucket, point,
-		    old_point[i] = point[i] = s,
+		    old_point[i] = s; point[i] = s,
 		    old_point[i] = s; point[i] = old_point[i] + size);
 	bytes_to_sort--;
 	if(exp == LAST_EXP__) {
 	    last_byte_sorted = 1;
 	}
-	
+
 	/* 2nd subdivision only for 3 bytes or more (and size > 512M) */
 	register int j;
 	if(bytes_to_sort > 1 && size > 512000000) {
@@ -387,11 +387,19 @@ void int_radix_sort(register int vector[], register unsigned int size) {
 	    if(exp == LAST_EXP__) { /* Check if last byte was sorted */
 	    	last_byte_sorted = 1;
 	    }
-	    
 	}
 	
     }
-
+    
+    /* Find the first negative element in the array in binsearch style */
+#define BINSEARCH__(array)						\
+    int increment = size >> 1;						\
+    int offset = increment;						\
+    while((array[offset] ^ array[offset - 1]) >= 0) {			\
+	increment = (increment > 1) ? increment >> 1 : 1;		\
+	offset = (array[offset] < 0) ? offset - increment : offset + increment; \
+    }
+    
     size = init_size; /* Restore size */
     int *v = vector;  /* Temporary values for the vfector and helper arrays */
     int *h = helper;
@@ -399,17 +407,11 @@ void int_radix_sort(register int vector[], register unsigned int size) {
     /* index of the first negative integer and put those numbers in the start */
     if(!last_byte_sorted && (((*v ^ v[size - 1]) < 0 && !swap) ||
 			     ((*h ^ h[size - 1]) < 0 && swap))) {
-
-	int offset = size - 1;
-    	int tminusoff;
-
 	/* If sorted array is in vector, use helper to re-order and vs */
     	if(!swap)  {
-    	    for(s = v, k = &v[size]; s < k && *s >= 0; ++s) { }
-    	    offset = s - v;
+	    BINSEARCH__(v);
 
-    	    tminusoff = size - offset;
-	    
+    	    int tminusoff = size - offset;
     	    if(offset < tminusoff) {
     	    	memcpy(h, v, sizeof(int) * offset);
     	    	memcpy(v, v + offset, sizeof(int) * tminusoff);
@@ -420,11 +422,9 @@ void int_radix_sort(register int vector[], register unsigned int size) {
     	    	memcpy(v, h, sizeof(int) * tminusoff);
     	    }
 	} else {
-	    for(s = h, k = &h[size]; s < k && *s >= 0; ++s) { }
-    	    offset = s - h;
+	    BINSEARCH__(h);
 
-    	    tminusoff = size - offset;
-
+    	    int tminusoff = size - offset;
     	    memcpy(v, h + offset, sizeof(int) * tminusoff);
     	    memcpy(v + tminusoff, h, sizeof(int) * (size - tminusoff));
     	}
