@@ -103,9 +103,14 @@ void int_radix_sort(register int vector[], register unsigned int size) {
     /* Check for max and min integer in [a, b[ array segment */
 #define LOOP_MAX__(a, b)				\
     for(s = &vector[a], k = &vector[b]; s < k; ++s) {	\
-	max = (*s > max) ? (*s) : max;			\
-	exp = (*s < exp) ? (*s) : exp;			\
-    }    
+	if(*s > max || *s < exp) {			\
+    	    if(*s > max)  {				\
+    		max = *s;				\
+    	    } else {					\
+    		exp = *s;				\
+    	    }						\
+    	}						\
+    }
     
     register int *helper; /* Helper array */
     register int *s, *k, i; /* Array iterators */
@@ -396,7 +401,9 @@ void int_radix_sort(register int vector[], register unsigned int size) {
     int increment = size >> 1;						\
     int offset = increment;						\
     while((array[offset] ^ array[offset - 1]) >= 0) {			\
-	increment = (increment > 1) ? increment >> 1 : 1;		\
+	if(increment > 1) {						\
+	    increment >>= 1;						\
+	}								\
 	offset = (array[offset] < 0) ? offset - increment : offset + increment; \
     }
     
