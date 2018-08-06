@@ -401,9 +401,7 @@ void int_radix_sort(register int vector[], register unsigned int size) {
     int increment = size >> 1;						\
     int offset = increment;						\
     while((array[offset] ^ array[offset - 1]) >= 0) {			\
-	if(increment > 1) {						\
-	    increment >>= 1;						\
-	}								\
+	increment = (increment > 1) ? increment >> 1 : 1;		\
 	offset = (array[offset] < 0) ? offset - increment : offset + increment; \
     }
     
